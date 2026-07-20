@@ -199,23 +199,23 @@ export default function App() {
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: Arial, sans-serif; font-size: 13px; color: #1a1a1a; background: #fff; }
   .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: 0.05; width: 480px; height: 480px; background-image: url(${LOGO}); background-size: contain; background-repeat: no-repeat; background-position: center; pointer-events: none; }
-  .header-bar { background: linear-gradient(135deg, #C0161C 0%, #8B0000 60%, #2d0000 100%); padding: 24px 36px 20px; display: flex; justify-content: space-between; align-items: center; }
+  .header-bar { background: linear-gradient(135deg, #2E6DA4 0%, #1a4a7a 60%, #0d2440 100%); padding: 24px 36px 20px; display: flex; justify-content: space-between; align-items: center; }
   .logo-img { height: 65px; filter: brightness(0) invert(1); }
   .header-info { text-align: right; }
   .orcamento-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.65); letter-spacing: .12em; text-transform: uppercase; }
   .header-data { font-size: 20px; font-weight: 900; color: #fff; margin-top: 4px; }
   .body { padding: 24px 36px 12px; }
-  .titulo-orcamento { font-size: 24px; font-weight: 900; color: #C0161C; letter-spacing: -0.02em; margin-bottom: 2px; margin-top: 6px; }
+  .titulo-orcamento { font-size: 24px; font-weight: 900; color: #2E6DA4; letter-spacing: -0.02em; margin-bottom: 2px; margin-top: 6px; }
   .subtitulo-orcamento { font-size: 12px; color: #999; margin-bottom: 22px; }
   .secao { margin-bottom: 20px; }
-  .secao-titulo { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #C0161C; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-  .secao-titulo::after { content: ""; flex: 1; height: 1.5px; background: linear-gradient(90deg, rgba(192,22,28,0.3), transparent); }
+  .secao-titulo { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #2E6DA4; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .secao-titulo::after { content: ""; flex: 1; height: 1.5px; background: linear-gradient(90deg, rgba(46,109,164,0.3), transparent); }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px; }
   .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px 20px; }
   .campo label { font-size: 9px; color: #bbb; text-transform: uppercase; letter-spacing: .08em; display: block; margin-bottom: 3px; }
   .campo p { font-size: 13px; font-weight: 700; color: #1a1a1a; }
   .divider { height: 1px; background: #f0f0f0; margin: 18px 0; }
-  .total-box { background: linear-gradient(135deg, #C0161C 0%, #8B0000 100%); color: #fff; border-radius: 12px; padding: 20px 26px; margin: 20px 0; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 6px 24px rgba(192,22,28,0.25); }
+  .total-box { background: linear-gradient(135deg, #2E6DA4 0%, #1a4a7a 100%); color: #fff; border-radius: 12px; padding: 20px 26px; margin: 20px 0; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 6px 24px rgba(46,109,164,0.25); }
   .total-esq .tlabel { font-size: 10px; color: rgba(255,255,255,0.65); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .08em; }
   .total-esq .valor { font-size: 34px; font-weight: 900; color: #fff; letter-spacing: -0.03em; }
   .total-esq .uni { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 4px; }
@@ -223,10 +223,10 @@ export default function App() {
   .total-dir .tlabel { font-size: 10px; color: rgba(255,255,255,0.65); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .08em; }
   .total-dir .val { font-size: 15px; font-weight: 700; color: #fff; }
   .rodape { margin-top: 16px; padding-top: 14px; border-top: 2px solid #f0f0f0; }
-  .rodape-titulo { font-size: 10px; font-weight: 700; color: #C0161C; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 10px; }
-  .rodape-item { padding: 4px 0 4px 10px; border-left: 3px solid rgba(192,22,28,0.2); margin-bottom: 5px; font-size: 10.5px; line-height: 1.55; color: #555; }
-  .rodape-item:nth-child(odd) { border-left-color: rgba(192,22,28,0.4); }
-  .footer-bar { background: linear-gradient(135deg, #C0161C, #8B0000); margin-top: 28px; padding: 10px 36px; text-align: center; color: rgba(255,255,255,0.7); font-size: 10px; }
+  .rodape-titulo { font-size: 10px; font-weight: 700; color: #2E6DA4; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 10px; }
+  .rodape-item { padding: 4px 0 4px 10px; border-left: 3px solid rgba(46,109,164,0.2); margin-bottom: 5px; font-size: 10.5px; line-height: 1.55; color: #555; }
+  .rodape-item:nth-child(odd) { border-left-color: rgba(46,109,164,0.4); }
+  .footer-bar { background: linear-gradient(135deg, #2E6DA4, #1a4a7a); margin-top: 28px; padding: 10px 36px; text-align: center; color: rgba(255,255,255,0.7); font-size: 10px; }
   @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
 </style></head><body>
 <div class="watermark"></div>
@@ -301,7 +301,7 @@ _Validade: 05 dias_`;
   return (
     <div style={{ minHeight: "100vh", background: "#F5F4F0", fontFamily: "'Inter', system-ui, sans-serif" }}>
       <div style={{ background: "#1A1A2E", padding: "18px 24px", display: "flex", alignItems: "center", gap: 12 }}>
-        <div style={{ width: 36, height: 36, borderRadius: 8, background: "#4A90D9", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🛍️</div>
+        <div style={{ width: 36, height: 36, borderRadius: 8, background: "#2E6DA4", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🛍️</div>
         <div>
           <div style={{ color: "#fff", fontWeight: 700, fontSize: 16 }}>Orçamento Rápido</div>
           <div style={{ color: "#8888AA", fontSize: 12 }}>Bela Cor Embalagens — Sacolas Plásticas</div>
@@ -380,7 +380,7 @@ _Validade: 05 dias_`;
             </div>
 
             <div style={{ display: "flex", gap: 10 }}>
-              <button onClick={gerarPDF} style={{ flex: 1, padding: "12px 0", borderRadius: 8, border: "none", background: "#4A90D9", color: "#fff", cursor: "pointer", fontWeight: 700, fontSize: 14 }}>
+              <button onClick={gerarPDF} style={{ flex: 1, padding: "12px 0", borderRadius: 8, border: "none", background: "#2E6DA4", color: "#fff", cursor: "pointer", fontWeight: 700, fontSize: 14 }}>
                 📄 Gerar PDF
               </button>
               <button onClick={mostrarTextoWhatsApp} style={{ flex: 1, padding: "12px 0", borderRadius: 8, border: "1.5px solid #2D2D4E", background: "transparent", color: "#8888AA", cursor: "pointer", fontWeight: 600, fontSize: 13 }}>
