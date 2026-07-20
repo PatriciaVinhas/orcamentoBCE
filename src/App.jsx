@@ -109,11 +109,31 @@ function interpolarPreco(precos, qtde) {
 const BRL = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 const hoje = () => new Date().toLocaleDateString("pt-BR");
 
+const IMPRESSAO_LABELS = {
+  "0x0": "Sem impressão (0x0)",
+  "1x0": "1x0 — 1 cor, só frente",
+  "1x1/ 2x0": "1x1 / 2x0 — 1 cor frente e verso / 2 cores só frente",
+  "2x1/ 3x0": "2x1 / 3x0 — 2 cores frente, 1 verso / 3 cores só frente",
+  "2x2/ 3x1": "2x2 / 3x1 — 2 cores frente e verso / 3 cores frente, 1 cor verso",
+  "3x2": "3x2 — 3 cores frente / 2 cores verso",
+  "3x3": "3x3 — 3 cores frente e verso",
+};
+
+const IMPRESSAO_DESC = {
+  "0x0": "Sacola sem nenhuma impressão.",
+  "1x0": "Impressão de uma cor apenas de um lado.",
+  "1x1/ 2x0": "Impressão uma cor frente e verso — ou — duas cores apenas de um lado.",
+  "2x1/ 3x0": "Impressão duas cores de um lado e uma cor do outro — ou — três cores apenas de um lado.",
+  "2x2/ 3x1": "Impressão duas cores frente e verso — ou — três cores frente e uma cor verso.",
+  "3x2": "Impressão três cores de um lado e duas cores do outro.",
+  "3x3": "Impressão três cores frente e verso.",
+};
+
 const RODAPE = [
   "Os valores estão baseados em informações via telefone, WhatsApp e/ou e-mail, portanto após confirmação de informações e layout serão feitas as alterações necessárias quanto a valores e prazo.",
   "Logomarca – Fornecida pelo cliente em Corel Draw ou AI ou EPS ou PDF – vetorizado.",
   "Fotolitos / Chapas – Cortesia, sem sombras ou degrade.",
-  "PRAZO DE PRODUÇÃO PADRÃO - FIM DO MÊS DE JULHO",
+  "PRAZO DE PRODUÇÃO PADRÃO - 20 a 25 dias corridos após aprovação do layout e pagamento sinal/total.",
   "PRAZOS DE PRODUÇÃO ESPECIAIS (VERIFICAR POSSIBILIDADE)\nDe 15 à 20 dias: +20% do Valor Total\nDe 20 à 25 dias: +10% do Valor Total\nDe 25 à 30 dias: +05% do Valor Total",
   "ATENÇÃO: Em caso de frete via transportadora ou correios, o prazo de envio não está contabilizado",
   "Variação de produção: 10% para mais ou para menos. Só cobramos o que entregamos.",
@@ -160,7 +180,8 @@ export default function App() {
     const item = CATALOGO[modelo][densidade].find(i => i.tamanho === tamanho && i.cor.split(" ").includes(cor) && i.impressao === impressao);
     if (!item) return;
     const precoUni = interpolarPreco(item.precos, qtde);
-    setResultado({ modelo, densidade, tamanho, cor, impressao, qtde, precoUni: precoUni.toFixed(4), totalBRL: qtde * precoUni });
+    const precoUniArred = Math.ceil(precoUni * 100) / 100;
+    setResultado({ modelo, densidade, tamanho, cor, impressao, qtde, precoUni: precoUniArred.toFixed(2), totalBRL: qtde * precoUniArred });
   }
 
   function limpar() {
@@ -176,32 +197,45 @@ export default function App() {
 <title>Orçamento - Bela Cor Embalagens</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: Arial, sans-serif; font-size: 13px; color: #222; padding: 32px; }
-  .header { border-bottom: 3px solid #1A1A2E; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
-  .empresa { font-size: 22px; font-weight: 800; color: #1A1A2E; }
-  .subtitulo { font-size: 11px; color: #666; margin-top: 2px; }
-  .data { font-size: 12px; color: #555; text-align: right; }
-  .secao { margin-bottom: 20px; }
-  .secao-titulo { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #1A1A2E; border-left: 3px solid #1A1A2E; padding-left: 8px; margin-bottom: 10px; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
-  .campo label { font-size: 10px; color: #888; text-transform: uppercase; }
-  .campo p { font-size: 13px; font-weight: 600; }
-  .total-box { background: #1A1A2E; color: #fff; border-radius: 10px; padding: 16px 20px; margin: 20px 0; display: flex; justify-content: space-between; align-items: center; }
-  .total-label { font-size: 12px; color: #8888AA; }
-  .total-valor { font-size: 26px; font-weight: 800; color: #4ADE80; }
-  .total-uni { font-size: 11px; color: #8888AA; margin-top: 2px; }
-  .rodape { margin-top: 24px; border-top: 1px solid #ddd; padding-top: 16px; }
-  .rodape-item { padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 11.5px; line-height: 1.6; color: #333; }
-  .rodape-item:last-child { border-bottom: none; }
-  @media print { body { padding: 16px; } }
+  body { font-family: Arial, sans-serif; font-size: 13px; color: #222; padding: 36px; background: #fff; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .empresa { font-size: 26px; font-weight: 900; color: #1A1A2E; letter-spacing: -0.03em; }
+  .subtitulo { font-size: 12px; color: #888; margin-top: 3px; }
+  .data-box { background: #1A1A2E; color: #fff; border-radius: 8px; padding: 10px 16px; text-align: right; min-width: 140px; }
+  .data-label { font-size: 10px; color: #8888AA; text-transform: uppercase; letter-spacing: .06em; }
+  .data-valor { font-size: 15px; font-weight: 700; margin-top: 2px; }
+  .divider { height: 3px; background: linear-gradient(90deg, #1A1A2E 60%, #4A90D9); border-radius: 2px; margin: 16px 0 24px; }
+  .secao { margin-bottom: 22px; }
+  .secao-titulo { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #4A90D9; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .secao-titulo::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px 24px; }
+  .campo label { font-size: 9px; color: #999; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 2px; }
+  .campo p { font-size: 13px; font-weight: 600; color: #1A1A2E; }
+  .total-box { background: #1A1A2E; color: #fff; border-radius: 12px; padding: 20px 24px; margin: 24px 0; display: flex; justify-content: space-between; align-items: center; }
+  .total-esq .label { font-size: 11px; color: #8888AA; margin-bottom: 4px; }
+  .total-esq .valor { font-size: 32px; font-weight: 900; color: #4ADE80; letter-spacing: -0.03em; }
+  .total-esq .uni { font-size: 11px; color: #6B7280; margin-top: 4px; }
+  .total-dir { text-align: right; }
+  .total-dir .label { font-size: 10px; color: #8888AA; margin-bottom: 4px; }
+  .total-dir .val { font-size: 13px; font-weight: 600; color: #E5E7EB; }
+  .rodape { margin-top: 24px; border-top: 2px solid #F0F0F0; padding-top: 16px; }
+  .rodape-titulo { font-size: 9px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+  .rodape-item { padding: 5px 0 5px 10px; border-left: 2px solid #E5E7EB; margin-bottom: 6px; font-size: 11px; line-height: 1.6; color: #444; }
+  @media print { body { padding: 20px; } }
 </style></head><body>
+
 <div class="header">
   <div>
     <div class="empresa">Bela Cor Embalagens</div>
     <div class="subtitulo">Orçamento — Sacola Plástica</div>
   </div>
-  <div class="data">Data: ${hoje()}</div>
+  <div class="data-box">
+    <div class="data-label">Data do Orçamento</div>
+    <div class="data-valor">${hoje()}</div>
+  </div>
 </div>
+<div class="divider"></div>
 
 <div class="secao">
   <div class="secao-titulo">Dados do Cliente</div>
@@ -212,20 +246,25 @@ export default function App() {
 
 <div class="secao">
   <div class="secao-titulo">Especificações do Produto</div>
-  <div class="grid2">
-    ${[["Modelo", resultado.modelo], ["Densidade", resultado.densidade], ["Tamanho", resultado.tamanho], ["Cor", resultado.cor.split(" ").join(", ")], ["Impressão", imp], ["Quantidade", resultado.qtde.toLocaleString("pt-BR") + " peças"]].map(([l,v]) => `<div class="campo"><label>${l}</label><p>${v}</p></div>`).join("")}
+  <div class="grid3">
+    ${[["Modelo", resultado.modelo], ["Densidade", resultado.densidade], ["Tamanho", resultado.tamanho], ["Cor", resultado.cor], ["Impressão", IMPRESSAO_LABELS[resultado.impressao] || resultado.impressao], ["Quantidade", resultado.qtde.toLocaleString("pt-BR") + " peças"]].map(([l,v]) => `<div class="campo"><label>${l}</label><p>${v}</p></div>`).join("")}
   </div>
 </div>
 
 <div class="total-box">
-  <div>
-    <div class="total-label">Total do Pedido</div>
-    <div class="total-valor">${BRL(resultado.totalBRL)}</div>
-    <div class="total-uni">${resultado.qtde.toLocaleString("pt-BR")} peças × R$ ${parseFloat(resultado.precoUni).toFixed(4)}</div>
+  <div class="total-esq">
+    <div class="label">Total do Pedido</div>
+    <div class="valor">${BRL(resultado.totalBRL)}</div>
+    <div class="uni">${resultado.qtde.toLocaleString("pt-BR")} peças × R$ ${parseFloat(resultado.precoUni).toFixed(2)} por unidade</div>
+  </div>
+  <div class="total-dir">
+    <div class="label">Validade</div>
+    <div class="val">05 dias</div>
   </div>
 </div>
 
 <div class="rodape">
+  <div class="rodape-titulo">Condições Gerais</div>
   ${RODAPE.map(t => `<div class="rodape-item">${t.replace(/\n/g, "<br>")}</div>`).join("")}
 </div>
 </body></html>`;
@@ -250,7 +289,7 @@ export default function App() {
 *Cor:* ${resultado.cor.split(" ").join(", ")}
 *Impressão:* ${imp}
 *Quantidade:* ${resultado.qtde.toLocaleString("pt-BR")} peças
-*Preço unitário:* R$ ${parseFloat(resultado.precoUni).toFixed(4)}
+*Preço unitário:* R$ ${parseFloat(resultado.precoUni).toFixed(2)}
 *Total:* ${BRL(resultado.totalBRL)}
 
 _Validade: 05 dias_`;
@@ -273,12 +312,23 @@ _Validade: 05 dias_`;
         <div style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 2px 12px rgba(0,0,0,0.07)", marginBottom: 16 }}>
           <h2 style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700, color: "#1A1A2E", textTransform: "uppercase", letterSpacing: ".06em" }}>Dados do Cliente</h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-            {[["nome","Nome"],["empresa","Empresa"],["telefone","Telefone"],["email","E-mail"],["vendedor","Vendedor"],["contato","Contato"]].map(([k,l]) => (
+            {[["nome","Nome","text"],["empresa","Empresa","text"],["email","E-mail","email"],["vendedor","Vendedor","text"]].map(([k,l,t]) => (
               <div key={k}>
                 <label style={labelSt}>{l}</label>
-                <input value={cliente[k]} onChange={e => setCliente(c => ({...c, [k]: e.target.value}))} placeholder={l} style={sel} />
+                <input type={t} value={cliente[k]} onChange={e => setCliente(c => ({...c, [k]: e.target.value}))} placeholder={l} style={sel} />
               </div>
             ))}
+            <div>
+              <label style={labelSt}>Telefone</label>
+              <input type="tel" value={cliente.telefone} onChange={e => setCliente(c => ({...c, telefone: e.target.value.replace(/\D/g,"")}))} placeholder="Somente números" style={sel} />
+            </div>
+            <div>
+              <label style={labelSt}>Contato</label>
+              <select value={cliente.contato} onChange={e => setCliente(c => ({...c, contato: e.target.value}))} style={sel}>
+                <option value="">— escolha —</option>
+                {["Telefone","WhatsApp","E-mail","Visita"].map(o => <option key={o}>{o}</option>)}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -290,7 +340,17 @@ _Validade: 05 dias_`;
           <Field label="Densidade" disabled={!modelo}><select value={densidade} onChange={e => onDensidade(e.target.value)} style={sel} disabled={!modelo}><option value="">— escolha —</option>{densidades.map(d => <option key={d}>{d}</option>)}</select></Field>
           <Field label="Tamanho" disabled={!densidade}><select value={tamanho} onChange={e => onTamanho(e.target.value)} style={sel} disabled={!densidade}><option value="">— escolha —</option>{tamanhos.map(t => <option key={t}>{t}</option>)}</select></Field>
           <Field label="Cor disponível" disabled={!tamanho}><select value={cor} onChange={e => onCor(e.target.value)} style={sel} disabled={!tamanho}><option value="">— escolha —</option>{cores.map(c => <option key={c} value={c}>{c.split(" ").join(", ")}</option>)}</select></Field>
-          <Field label="Impressão (frente x verso)" disabled={!cor}><select value={impressao} onChange={e => { setImpressao(e.target.value); setQuantidade(""); setResultado(null); }} style={sel} disabled={!cor}><option value="">— escolha —</option>{impressoes.map(i => <option key={i} value={i}>{i === "0x0" ? "Sem impressão (0x0)" : i}</option>)}</select></Field>
+          <Field label="Impressão" disabled={!cor}>
+            <select value={impressao} onChange={e => { setImpressao(e.target.value); setQuantidade(""); setResultado(null); }} style={sel} disabled={!cor}>
+              <option value="">— escolha —</option>
+              {impressoes.map(i => <option key={i} value={i}>{IMPRESSAO_LABELS[i] || i}</option>)}
+            </select>
+            {impressao && IMPRESSAO_DESC[impressao] && (
+              <div style={{ marginTop: 6, padding: "8px 10px", background: "#F0F4FF", borderRadius: 6, fontSize: 11.5, color: "#374151", lineHeight: 1.5 }}>
+                💡 {IMPRESSAO_DESC[impressao]}
+              </div>
+            )}
+          </Field>
           <Field label={`Quantidade${impressao ? ` (mínimo: ${qtdeMin} peças)` : ""}`} disabled={!impressao}>
             <input type="number" value={quantidade} min={qtdeMin} step={50} onChange={e => { setQuantidade(e.target.value); setResultado(null); }} placeholder={`Ex: ${qtdeMin}`} disabled={!impressao} style={{ ...sel, appearance: "none" }} />
             {quantidade && parseInt(quantidade) < qtdeMin && <div style={{ color: "#E53E3E", fontSize: 12, marginTop: 4 }}>Quantidade mínima: {qtdeMin} peças</div>}
@@ -307,14 +367,14 @@ _Validade: 05 dias_`;
           <div style={{ marginTop: 16, background: "#1A1A2E", borderRadius: 16, padding: 24, color: "#fff" }}>
             <div style={{ fontSize: 11, color: "#8888AA", fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 14 }}>Resultado</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 16px", marginBottom: 18 }}>
-              {[["Modelo", resultado.modelo], ["Densidade", resultado.densidade], ["Tamanho", resultado.tamanho], ["Cor", resultado.cor.split(" ").join(", ")], ["Impressão", resultado.impressao === "0x0" ? "Sem impressão" : resultado.impressao], ["Quantidade", resultado.qtde.toLocaleString("pt-BR") + " peças"], ["Preço unitário", "R$ " + parseFloat(resultado.precoUni).toFixed(4)]].map(([k,v]) => (
+              {[["Modelo", resultado.modelo], ["Densidade", resultado.densidade], ["Tamanho", resultado.tamanho], ["Cor", resultado.cor], ["Impressão", IMPRESSAO_LABELS[resultado.impressao] || resultado.impressao], ["Quantidade", resultado.qtde.toLocaleString("pt-BR") + " peças"], ["Preço unitário", "R$ " + parseFloat(resultado.precoUni).toFixed(2)]].map(([k,v]) => (
                 <div key={k}><div style={{ fontSize: 10, color: "#6B7280", marginBottom: 2 }}>{k}</div><div style={{ fontSize: 13, fontWeight: 500, color: "#E5E7EB", wordBreak: "break-word" }}>{v}</div></div>
               ))}
             </div>
             <div style={{ borderTop: "1px solid #2D2D4E", paddingTop: 14, marginBottom: 16 }}>
               <div style={{ fontSize: 11, color: "#8888AA", marginBottom: 4 }}>Total do pedido</div>
               <div style={{ fontSize: 30, fontWeight: 800, color: "#4ADE80" }}>{BRL(resultado.totalBRL)}</div>
-              <div style={{ fontSize: 11, color: "#6B7280", marginTop: 3 }}>{resultado.qtde.toLocaleString("pt-BR")} peças × R$ {parseFloat(resultado.precoUni).toFixed(4)}</div>
+              <div style={{ fontSize: 11, color: "#6B7280", marginTop: 3 }}>{resultado.qtde.toLocaleString("pt-BR")} peças × R$ {parseFloat(resultado.precoUni).toFixed(2)}</div>
             </div>
 
             <div style={{ display: "flex", gap: 10 }}>
@@ -322,9 +382,12 @@ _Validade: 05 dias_`;
                 📄 Gerar PDF
               </button>
               <button onClick={mostrarTextoWhatsApp} style={{ flex: 1, padding: "12px 0", borderRadius: 8, border: "1.5px solid #2D2D4E", background: "transparent", color: "#8888AA", cursor: "pointer", fontWeight: 600, fontSize: 13 }}>
-                📋 Texto WhatsApp
+                📋 WhatsApp
               </button>
             </div>
+            <button onClick={limpar} style={{ marginTop: 10, width: "100%", padding: "12px 0", borderRadius: 8, border: "none", background: "#4ADE80", color: "#1A1A2E", cursor: "pointer", fontWeight: 700, fontSize: 14 }}>
+              ➕ Novo Orçamento
+            </button>
 
             {textoCopiado && (
               <div style={{ marginTop: 14 }}>
