@@ -297,8 +297,8 @@ export default function App() {
   *{margin:0;padding:0;box-sizing:border-box;}
   body{font-family:Arial,sans-serif;font-size:11px;color:#1a1a1a;background:#fff;}
   .wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.04;width:400px;height:400px;background-image:url(${LOGO});background-size:contain;background-repeat:no-repeat;background-position:center;pointer-events:none;}
-  .hbar{background:linear-gradient(135deg,#2E6DA4 0%,#1a4a7a 60%,#0d2440 100%);padding:16px 28px;display:flex;justify-content:space-between;align-items:center;}
-  .limg{height:52px;filter:brightness(0) invert(1);}
+  .hbar{background:linear-gradient(135deg,#2E6DA4 0%,#1a4a7a 60%,#0d2440 100%);padding:20px 28px;display:flex;justify-content:space-between;align-items:center;}
+  .limg{height:80px;filter:brightness(0) invert(1);}
   .hinfo{text-align:right;color:#fff;}
   .hlabel{font-size:9px;color:rgba(255,255,255,0.6);letter-spacing:.12em;text-transform:uppercase;}
   .hdata{font-size:15px;font-weight:900;margin-top:2px;}
@@ -367,8 +367,8 @@ export default function App() {
 
   return (
     <div style={{ minHeight:"100vh", background:"#F5F4F0", fontFamily:"'Inter',system-ui,sans-serif" }}>
-      <div style={{ background:"linear-gradient(135deg,#2E6DA4,#1a4a7a)", padding:"14px 24px", display:"flex", alignItems:"center", gap:14 }}>
-        <img src={LOGO} alt="Bela Cor" style={{ height:42, filter:"brightness(0) invert(1)" }} />
+      <div style={{ background:"linear-gradient(135deg,#2E6DA4,#1a4a7a)", padding:"16px 24px", display:"flex", alignItems:"center", gap:14 }}>
+        <img src={LOGO} alt="Bela Cor" style={{ height:70, filter:"brightness(0) invert(1)" }} />
         <div>
           <div style={{ color:"#fff", fontWeight:700, fontSize:15 }}>Orçamento Rápido</div>
           <div style={{ color:"rgba(255,255,255,0.65)", fontSize:11 }}>Bela Cor Embalagens — Sacolas Plásticas</div>
